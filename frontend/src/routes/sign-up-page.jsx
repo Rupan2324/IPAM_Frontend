@@ -76,7 +76,7 @@ const SignUpPage = () => {
                                     type='email'
                                     name='email'
                                     required
-                                    pattern='/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/g'
+                                    pattern='^[^\s@]+@[^\s@]+\.[^\s@]+$'
                                     placeholder='Enter email'
                                     autoComplete='username'
                                     value={email}
