@@ -54,10 +54,10 @@ const MuiDrawer = (props) => {
                         <LayersIcon />
                         <Typography>Subnets</Typography>
                     </NavLink>
-                    <NavLink to='ip-ranges'>
+                    {/* <NavLink to='ip-ranges'>
                         <HubIcon />
                         <Typography>IP Ranges</Typography>
-                    </NavLink>
+                    </NavLink> */}
                     <Divider />
                     <ListItem>
                         <StyledButton onClick={handleLogout} sx={{width: "100%"}}>

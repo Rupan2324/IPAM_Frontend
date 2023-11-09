@@ -62,18 +62,18 @@ function SubnetsTable({type}) {
                 );
             },
         },
-        {
-            id: "gateway",
-            label: "Gateway",
-            minWidth: 170,
-            component: function ({value}) {
-                return (
-                    <Typography paragraph m='0' fontWeight='700' fontSize='14px'>
-                        {value}
-                    </Typography>
-                );
-            },
-        },
+        // {
+        //     id: "gateway",
+        //     label: "Gateway",
+        //     minWidth: 170,
+        //     component: function ({value}) {
+        //         return (
+        //             <Typography paragraph m='0' fontWeight='700' fontSize='14px'>
+        //                 {value}
+        //             </Typography>
+        //         );
+        //     },
+        // },
         {
             id: "size",
             label: "Size",
@@ -99,18 +99,18 @@ function SubnetsTable({type}) {
                 );
             },
         },
-        {
-            id: "expiration",
-            label: "Expiration",
-            minWidth: 200,
-            component: function ({value}) {
-                return (
-                    <Typography paragraph m='0' fontWeight='700' fontSize='12px'>
-                        {value ? new Date(value).toLocaleString() : "-----"}
-                    </Typography>
-                );
-            },
-        },
+        // {
+        //     id: "expiration",
+        //     label: "Expiration",
+        //     minWidth: 200,
+        //     component: function ({value}) {
+        //         return (
+        //             <Typography paragraph m='0' fontWeight='700' fontSize='12px'>
+        //                 {value ? new Date(value).toLocaleString() : "-----"}
+        //             </Typography>
+        //         );
+        //     },
+        // },
         {
             id: "status",
             label: "Actions",

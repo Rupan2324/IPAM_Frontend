@@ -71,7 +71,6 @@ export default function Subnets() {
         name: "",
         cidr: "",
         mask: "",
-        gateway: "",
     });
     const hasMounted = useRef(false);
     const {axiosPrivate} = useAxiosPrivate();
@@ -115,18 +114,6 @@ export default function Subnets() {
             },
         },
         {
-            id: "gateway",
-            label: "Gateway",
-            minWidth: 170,
-            component: function ({value}) {
-                return (
-                    <Typography paragraph m='0' fontWeight='700' fontSize='14px'>
-                        {value}
-                    </Typography>
-                );
-            },
-        },
-        {
             id: "size",
             label: "Size",
             minWidth: 100,
@@ -148,18 +135,6 @@ export default function Subnets() {
                     <Chip key={value} color={colorMap[value]} size='sm'>
                         {value}
                     </Chip>
-                );
-            },
-        },
-        {
-            id: "expiration",
-            label: "Expiration",
-            minWidth: 200,
-            component: function ({value}) {
-                return (
-                    <Typography paragraph m='0' fontWeight='700' fontSize='12px'>
-                        {value ? new Date(value).toLocaleString() : "-----"}
-                    </Typography>
                 );
             },
         },
@@ -207,18 +182,18 @@ export default function Subnets() {
     const post = async (e) => {
         try {
             e.preventDefault();
-            if (form.name === "" || form.cidr === "" || form.mask === "" || form.gateway === "") {
+            if (form.name === "" || form.cidr === "" || form.mask === "") {
                 setErrorMessage("Please fill all fields");
                 setIsAlertOpen(true);
             }
-            const URL = "/api/ipam/subnets";
+            const URL = "/api/ipam/createSubnets";
             const res = await axiosPrivate.post(URL, {...form});
             toast(`🦄 new subnet added to pool`, toastConfig);
             if (res.status === 201) {
                 fetchData();
                 fetchStats();
                 handleClose();
-                setForm({name: "", cidr: "", mask: "", gateway: ""});
+                setForm({name: "", cidr: "", mask: ""});
             }
         } catch (error) {
             setErrorMessage(error.response.data.message);
@@ -345,14 +320,6 @@ export default function Subnets() {
                             variant='outlined'
                             value={form.mask}
                             onChange={(e) => setForm({...form, mask: e.target.value})}
-                        />
-                        <TextField
-                            sx={{width: "100%", marginBottom: "1rem"}}
-                            id='outlined-basic'
-                            label='Gateway'
-                            variant='outlined'
-                            value={form.gateway}
-                            onChange={(e) => setForm({...form, gateway: e.target.value})}
                         />
                         <Button sx={{width: "100%"}} variant='contained' onClick={post}>
                             Add

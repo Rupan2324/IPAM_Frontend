@@ -93,8 +93,8 @@ export default function IPAddressesTable() {
     const [open, setOpen] = useState(false);
     const [form, setForm] = useState({address: ""});
     const hasMounted = useRef(false);
-    const [ranges, setRanges] = useState([]);
-    const [rangeId, setRangeId] = useState("");
+    const [subnets, setSubnets] = useState([]);
+    const [subnetId, setSubnetId] = useState("");
     const {axiosPrivate} = useAxiosPrivate();
     const [errorMessage, setErrorMessage] = useState("");
     const [isAlertOpen, setIsAlertOpen] = useState(false);
@@ -138,18 +138,18 @@ export default function IPAddressesTable() {
                 );
             },
         },
-        {
-            id: "expiration",
-            label: "Expiration",
-            minWidth: 170,
-            component: function ({value}) {
-                return (
-                    <Typography paragraph m='0' fontWeight='700' fontSize='12px'>
-                        {value ? new Date(value).toLocaleString() : "-----"}
-                    </Typography>
-                );
-            },
-        },
+        // {
+        //     id: "expiration",
+        //     label: "Expiration",
+        //     minWidth: 170,
+        //     component: function ({value}) {
+        //         return (
+        //             <Typography paragraph m='0' fontWeight='700' fontSize='12px'>
+        //                 {value ? new Date(value).toLocaleString() : "-----"}
+        //             </Typography>
+        //         );
+        //     },
+        // },
         {
             id: "updatedAt",
             label: "Updated At",
@@ -184,7 +184,7 @@ export default function IPAddressesTable() {
         },
     ];
 
-    const handleChange = (event) => setRangeId(event.target.value);
+    const handleChange = (event) => setSubnetId(event.target.value);
     const handleOpen = () => setOpen(true);
     const handleClose = () => setOpen(false);
     const handleChangePage = (event, newPage) => setPage(newPage);
@@ -217,13 +217,13 @@ export default function IPAddressesTable() {
     const fetchData = useCallback(async () => {
         try {
             setIsLoading(true);
-            const generateUrl = (page, rowsPerPage, rangeId) => {
-                if (rangeId) {
-                    return `/api/ipam/ipranges/${rangeId}/ipaddresses?page=${page}&size=${rowsPerPage}`;
+            const generateUrl = (page, rowsPerPage, subnetId) => {
+                if (subnetId) {
+                    return `/api/ipam/subnets/${subnetId}/ipaddresses?page=${page}&size=${rowsPerPage}`;
                 }
                 return `/api/ipam/ipaddresses?page=${page}&size=${rowsPerPage}`;
             };
-            const url = generateUrl(page, rowsPerPage, rangeId);
+            const url = generateUrl(page, rowsPerPage, subnetId);
             const response = await axiosPrivate.get(url);
             const {data, totalElements} = response.data;
 
@@ -234,7 +234,7 @@ export default function IPAddressesTable() {
         } finally {
             setIsLoading(false);
         }
-    }, [axiosPrivate, page, rowsPerPage, rangeId]);
+    }, [axiosPrivate, page, rowsPerPage, subnetId]);
 
     useEffect(() => {
         const resetPageAndRowsPerPage = () => {
@@ -242,13 +242,13 @@ export default function IPAddressesTable() {
             setRowsPerPage(10);
         };
         resetPageAndRowsPerPage();
-    }, [rangeId]);
+    }, [subnetId]);
 
-    const fetchRanges = useCallback(async () => {
+    const fetchSubnets = useCallback(async () => {
         try {
-            const URL = "/api/ipam/ipranges";
+            const URL = "/api/ipam/subnets";
             const response = await axiosPrivate.get(URL);
-            setRanges(response.data.data);
+            setSubnets(response.data.data);
         } catch (error) {
             console.error("Error fetching data:", error);
         }
@@ -257,12 +257,12 @@ export default function IPAddressesTable() {
     useEffect(() => {
         if (hasMounted.current) {
             fetchData();
-            fetchRanges();
+            fetchSubnets();
         }
         return () => {
             hasMounted.current = true;
         };
-    }, [fetchData, fetchRanges]);
+    }, [fetchData, fetchSubnets]);
 
     return (
         <React.Fragment>
@@ -280,20 +280,20 @@ export default function IPAddressesTable() {
                 <Box sx={{display: "flex", alignItems: "center", gap: "1rem"}}>
                     <h1 id='ipaddress-title'>IP Addresses</h1>
                     <FormControl sx={{m: 1, minWidth: 200}}>
-                        <InputLabel id='demo-simple-select-helper-label'>Ip Range</InputLabel>
+                        <InputLabel id='demo-simple-select-helper-label'>Subnets</InputLabel>
                         <Select
                             labelId='demo-simple-select-helper-label'
                             id='demo-simple-select-helper'
-                            value={rangeId}
-                            label='Ip Range'
+                            value={subnetId}
+                            label='Subnets'
                             onChange={handleChange}>
                             <MenuItem key='all12312' value=''>
                                 <em>None</em>
                             </MenuItem>
-                            {ranges.map((range) => (
-                                <MenuItem key={range.id} value={range.id}>
+                            {subnets.map((subnets) => (
+                                <MenuItem key={subnets.id} value={subnets.id}>
                                     <Typography paragraph m='0' fontWeight='700' fontSize='14px'>
-                                        {range.startAddress} - {range.endAddress}
+                                        {subnets.cidr} - {subnets.mask}
                                     </Typography>
                                 </MenuItem>
                             ))}

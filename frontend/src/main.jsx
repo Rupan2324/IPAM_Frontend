@@ -21,10 +21,10 @@ const router = createBrowserRouter([
                 path: "/",
                 element: <RoleGuard componentName="home" />,
             },
-            {
-                path: "/ip-ranges",
-                element: <RoleGuard componentName="ipRanges" />,
-            },
+            // {
+            //     path: "/ip-ranges",
+            //     element: <RoleGuard componentName="ipRanges" />,
+            // },
             {
                 path: "/subnets",
                 element: <RoleGuard componentName="subnets" />,
